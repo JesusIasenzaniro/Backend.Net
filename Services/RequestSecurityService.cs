@@ -1,4 +1,7 @@
-﻿using Backend.Net.Interfaces;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using Backend.Net.Interfaces;
 
 namespace Backend.Net.Services
 {
@@ -22,8 +25,38 @@ namespace Backend.Net.Services
 
         public bool ValidateToken(string token)
         {
-            // Your existing token validation logic
-            return true;
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var validationParameters = GetValidationParameters();
+
+            try
+            {
+                tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private TokenValidationParameters GetValidationParameters()
+        {
+            return new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidIssuer = _issuer,
+
+                ValidateAudience = true,
+                ValidAudience = _audience,
+
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey)),
+
+                RequireExpirationTime = true,
+                ValidateLifetime = true,
+
+                ClockSkew = TimeSpan.Zero,
+            };
         }
     }
 }
