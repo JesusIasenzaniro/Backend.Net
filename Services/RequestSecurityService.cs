@@ -1,5 +1,4 @@
-﻿using System;
-using Backend.Net.Interfaces;
+﻿using Backend.Net.Interfaces;
 
 namespace Backend.Net.Services
 {
@@ -11,9 +10,9 @@ namespace Backend.Net.Services
 
         public RequestSecurityService()
         {
-            _secretKey = Environment.GetEnvironmentVariable("SECRET_KEY");
-            _issuer = Environment.GetEnvironmentVariable("ISSUER");
-            _audience = Environment.GetEnvironmentVariable("AUDIENCE");
+            _secretKey = Environment.GetEnvironmentVariable("SECRET_KEY")!;
+            _issuer = Environment.GetEnvironmentVariable("ISSUER")!;
+            _audience = Environment.GetEnvironmentVariable("AUDIENCE")!;
 
             if (string.IsNullOrEmpty(_secretKey) || string.IsNullOrEmpty(_issuer) || string.IsNullOrEmpty(_audience))
             {
